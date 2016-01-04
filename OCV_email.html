@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <!-- utf-8 works for most cases -->
+  <meta name="viewport" content="width=device-width">
+  <!-- Forcing initial-scale shouldn't be necessary -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Use the latest (edge) version of IE rendering engine -->
+  <title></title>
+  <!-- the <title> tag shows on email notifications on Android 4.4. -->
+
+  <style type="text/css">
+    /* ensure that clients don’t add any padding or spaces around the email design and allow us to style emails for the entire width of the preview pane */
+
+    body,
+    #bodyTable {
+      height: 100% !important;
+      width: 100% !important;
+      margin: 0;
+      padding: 0;
+    }
+    /* Ensures Webkit- and Windows-based clients don’t automatically resize the email text. */
+
+    body,
+    table,
+    td,
+    p,
+    a,
+    li,
+    blockquote {
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+    /* Forces Yahoo! to display emails at full width */
+
+    .msg-body {
+      width: 100% !important;
+      display: block !important
+    }
+    /* Forces Hotmail to display emails at full width */
+
+    .ReadMsgBody .ExternalClass {
+      width: 100%;
+      background-color: #eeeeee;
+    }
+    /* Forces Hotmail to display normal line spacing. */
+
+    .ExternalClass,
+    .ExternalClass p,
+    .ExternalClass span,
+    .ExternalClass font,
+    .ExternalClass td,
+    .ExternalClass div {
+      line-height: 100%;
+    }
+    /* Resolves webkit padding issue. */
+
+    table {
+      border-spacing: 0;
+    }
+    /* Resolves the Outlook 2007, 2010, and Gmail td padding issue, and removes spacing around tables that Outlook adds. */
+
+    table,
+    td {
+      border-collapse: collapse;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    /* Corrects the way Internet Explorer renders resized images in emails. */
+
+    img {
+      -ms-interpolation-mode: bicubic;
+    }
+    /* Ensures images don’t have borders or text-decorations applied to them by default. */
+
+    img,
+    a img {
+      border: 0;
+      outline: none;
+      text-decoration: none;
+    }
+    /* Styles Yahoo's auto-sensing link color and border */
+
+    .yshortcuts a {
+      border-bottom: none !important;
+    }
+    /* Styles the tel URL scheme */
+
+    a[href^=tel] {
+      color: #000000 !important;
+    }
+    /* Media queries for when the viewport is smaller than the default email width but not too narrow. */
+
+    @media screen and (max-device-width: 600px),
+    screen and (max-width: 600px) {
+      /* Constrains email width for small screens */
+
+      table[class="email-container"] {
+        width: 100% !important;
+      }
+      /* Constrains tables for small screens */
+
+      table[class="fluid"] {
+        width: 100% !important;
+      }
+      /* Forces images to resize to full width of their container */
+
+      img[class="fluid"],
+      img[class="force-col-center"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+      }
+      /* And centers these ones */
+
+      img[class="force-col-center"] {
+        margin: auto !important;
+      }
+      /* Forces table cells into rows */
+
+      td[class="force-col"],
+      td[class="force-col-center"] {
+        display: block !important;
+        width: 100% !important;
+        clear: both;
+      }
+      /* And centers these ones */
+
+      td[class="force-col-center"] {
+        text-align: center !important;
+      }
+      /* Forces table cells into rows */
+      /* Floats a previously stacked image to the left */
+
+      img[class="col-3-img-l"] {
+        float: left;
+        margin: 0 15px 15px 0;
+      }
+      /* Floats a previously stacked image to the right */
+
+      img[class="col-3-img-r"] {
+        float: right;
+        margin: 0 0 15px 15px;
+      }
+      /* Makes buttons full width */
+
+      table[class="button"] {
+        width: 100% !important;
+      }
+    }
+    /* Media queries for when the viewport is narrow. */
+    /* Rules prefixed with 'hh-' (for 'handheld') repeat much of what's above, but these don't trigger until the smaller screen width. */
+
+    @media screen and (max-device-width: 425px),
+    screen and (max-width: 425px) {
+      /* Helper only visible on handhelds. All styles are inline along with a `display:none`, which this class overrides */
+
+      div[class="hh-visible"] {
+        display: block !important;
+      }
+      /* Center stuff */
+
+      div[class="hh-center"] {
+        text-align: center;
+        width: 100% !important;
+      }
+      /* Constrain tables for small screens */
+
+      table[class="hh-fluid"] {
+        width: 100% !important;
+      }
+      /* Force images to resize to full width of their container */
+
+      img[class="hh-fluid"],
+      img[class="hh-force-col-center"] {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+      }
+      /* And center these ones */
+
+      img[class="hh-force-col-center"] {
+        margin: auto !important;
+      }
+      /* Force table cells into rows */
+
+      td[class="hh-force-col"],
+      td[class="hh-force-col-center"] {
+        display: block !important;
+        width: 100% !important;
+        clear: both;
+      }
+      /* And center these ones */
+
+      td[class="hh-force-col-center"] {
+        text-align: center !important;
+      }
+      /* Stack the previously floated images */
+
+      img[class="col-3-img-l"],
+      img[class="col-3-img-r"] {
+        float: none !important;
+        margin: 15px auto !important;
+        text-align: center !important;
+      }
+      /* Image swapper, from http://www.emailonacid.com/blog/details/C13/a_slick_new_image_swapping_technique_for_responsive_emails */
+
+      span[id=switcher] {
+        display: block;
+        background-image: url(http://emailcdn.erickson.life/sites/default/files/emails/headers/mobile/ocv-mobile-header.gif) !important;
+        background-repeat: no-repeat !important;
+        background-position: top center !important;
+        /* width: 425px !important;*/
+
+        background-size: contain;
+        height: 180px !important;
+        margin-bottom: -30px;
+      }
+      img[id=houdini] {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body bgcolor="#E6E7E9" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="margin:0; padding:0;-webkit-text-size-adjust:none; -ms-text-size-adjust:none;background: #f4f4f4;">
+  <table cellpadding="0" cellspacing="0" border="0" height="100%" width="100%" bgcolor="#f4f4f4" style="background: #E6E7E9;" id="bodyTable">
+    <tr>
+      <td>
+        <!-- Email Container : BEGIN -->
+        <!-- This table wraps the whole body email within it's width (600px), sets the background color (white) and border (thin, gray, solid) -->
+        <table border="0" width="600" cellpadding="0" cellspacing="0" align="center" style="background: #ffffff;border: 1px solid #e5e5e5;" class="email-container">
+          <!-- Single Fluid Image, No Crop : BEGIN -->
+         <!--  <tr>
+            <td>
+              <a href="http://www.ericksonliving.com/oak-crest/about-us/request-your-personal-tour-oak-crest">
+                <span id="switcher">
+                <img id="houdini" class="fluid" src="http://emailcdn.erickson.life/sites/default/files/emails/headers/desktop/ocv-desktop-header.gif" alt="Oak Crest. An Erickson Living Community in Parkville." height="180" width="600" border="0" style="display: block;">
+                </span>
+              </a>
+            </td>
+          </tr> -->
+          <!-- Single Fluid Image, No Crop : END -->
+
+          <!-- Body Content, Full Width, Fluid Column : BEGIN -->
+          <tr>
+            <td style="padding-top:30px;border-bottom: 1px solid #e5e5e5;">
+              <table border="0" width="100%" cellpadding="0" cellspacing="0" align="center">
+                <tr>
+                  <td align="center" style="padding:0 30px;">
+                    <img src="http://cdni.ericksonliving.com/emails/11087774_CCE_new_year_new_you/header-img-OCV.png" alt="" border="0" style="display: block;" class="fluid" width="" height="">
+
+
+                  </td>
+                </tr>
+                <tr>
+                  <td style="text-align:center;padding: 30px; font-family: sans-serif; font-size: 24px; line-height: 32px; color: #444444;">
+                   
+
+                    The right rehabilitation can make all the difference for a speedy recovery. So don’t settle for just any provider. Choose the senior rehabilitation specialists at Oak Crest.
+
+
+                    <div style="color: #0054a3; font-size: 24px; line-height: 32px; font-family: sans-serif; text-align: center; padding-top:20px; padding-bottom: 10px;" class="hh-center">
+                      <strong>See what sets us apart.</strong>
+                    </div>
+
+                    <div style="text-align: center;">Call <strong style="color:#0054a3;">1-800-917-3720</strong>  for more information or  </div>
+
+                    <table border="0" cellspacing="0" cellpadding="20" align="center">
+                      <tr>
+                        <td align="center">
+                          <a href="http://lp2.ericksonliving.com/CCE_new_year_new_you/tour.php?from=OCV-EMAIL" target="_blank" style="font-size: 24px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #fff; text-decoration: none; background-color: #6EB43F; border-top: 20px solid #6EB43F; border-bottom: 15px solid #6EB43F; border-left: 18px solid #6EB43F; border-right: 18px solid #6EB43F; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; display: inline-block; width: 150px;">CLICK HERE</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Body Content, Full Width, Fluid Column : END -->
+
+          <!-- Logo : BEGIN -->
+          <tr>
+            <td align="center" style="padding:50px 0 20px 0;">
+              <a href="http://www.ericksonliving.com/oak-crest/welcome-oak-crest">
+                <img style="max-width: 80%; height: auto;" src="http://emailcdn.erickson.life/sites/default/files/emails/logos/il-logo-OCV.gif" alt="Oak Crest" width="240" height="75" />
+              </a>
+            </td>
+          </tr>
+          <!-- Logo : END -->
+
+                    <!-- Three Column ==> Stacked Wide Layout ==> Stacked Narrow Layout : BEGIN -->
+          <tr>
+            <td style="padding: 30px;" align="center">
+              <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="170" style="padding-right: 10px; padding-bottom: 10px; font-family: sans-serif; font-size: 16px; line-height: 22px;color: #444444;" valign="top" class="force-col">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td align="center">
+                                                  <a href="http://www.ericksonliving.com/oak-crest/welcome-oak-crest" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #fff; text-decoration: none; background-color: #F58026; border-top: 15px solid #F58026; border-bottom: 15px solid #F58026; border-left: 8px solid #F58026; border-right: 8px solid #F58026; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; display: inline-block; width: 150px;">Browse the Site</a>
+                                                </td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td style="font-size: 0; line-height: 0; display: none;" class="hh-spacer"> </td>
+
+                  <td width="170" style="padding-right: 10px; padding-bottom: 10px; font-family: sans-serif; font-size: 16px; line-height: 22px;color: #444444;" valign="top" class="force-col">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td align="center">
+                                                  <a href="http://www.ericksonliving.com/oak-crest/about-us/request-your-personal-tour-oak-crest" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #fff; text-decoration: none; background-color: #223E99; border-top: 15px solid #223E99; border-bottom: 15px solid #223E99; border-left: 8px solid #223E99; border-right: 8px solid #223E99; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; display: inline-block; width: 150px;">Schedule a Tour</a>
+                                                </td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td style="font-size: 0; line-height: 0; display: none;" class="hh-spacer"> </td>
+
+                  <td width="170" style="font-family: sans-serif; font-size: 16px; line-height: 22px;color: #444444;" valign="top" class="force-col">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td align="center">
+                                                  <a href="http://www.ericksonliving.com/oak-crest/about-us/receive-your-free-oak-crest-brochure" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; font-weight: normal; color: #fff; text-decoration: none; background-color: #6EB43F; border-top: 15px solid #6EB43F; border-bottom: 15px solid #6EB43F; border-left: 8px solid #6EB43F; border-right: 8px solid #6EB43F; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius: 3px; display: inline-block; width: 150px;">Request a Brochure</a>
+                                                </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Three Column ==> Stacked Wide Layout ==> Stacked Narrow Layout : END -->
+          
+          <!-- Phone/Social : BEGIN -->
+          <tr>
+            <td align="center" style="padding: 20px 0; border-bottom: 1px solid #e5e5e5;">
+              <h2 style="padding-bottom:40px;  margin: 0; font-family: sans-serif; font-size: 28px; line-height: 22px; color: #223E99; text-align: center;"><strong>1-800-917-3720</strong></h2>
+              <!--Connect Buttons-->
+              <table width="50%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <img src="http://cdni.ericksonliving.com/Emails/Template_Image_Library/connect_01.gif" width="142" height="26" alt="Connect With Us" />
+                  </td>
+                  <td>
+                    <a href="https://www.facebook.com/ericksonliving">
+                      <img src="http://cdni.ericksonliving.com/Emails/Template_Image_Library/connect_02.gif" alt="Facebook" width="38" height="26" border="0" />
+                    </a>
+                  </td>
+                  <td>
+                    <a href="https://twitter.com/ericksonliving">
+                      <img src="http://cdni.ericksonliving.com/Emails/Template_Image_Library/connect_03.gif" alt="Twitter" width="31" height="26" border="0" />
+                    </a>
+                  </td>
+                  <td>
+                    <a href="http://www.youtube.com/user/ericksonnewmedia">
+                      <img src="http://cdni.ericksonliving.com/Emails/Template_Image_Library/connect_04.gif" alt="YouTube" width="31" height="26" border="0" />
+                    </a>
+                  </td>
+                  <td>
+                    <a href="http://www.pinterest.com/ericksonliving/">
+                      <img src="http://cdni.ericksonliving.com/Emails/Template_Image_Library/connect_05.gif" alt="Pinterest" width="29" height="26" border="0" />
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Phone/Social : END -->
+
+          <!-- Footer : BEGIN -->
+          <tr>
+            <td style="text-align: left; padding: 30px;font-family: sans-serif; font-size: 11px; line-height: 16px;color: #888888;">
+              You have received this message because you previously indicated an interest in receiving information and special offers from Oak Crest and/or Erickson Living® via email and have provided your email address to us. To ensure that you continue receiving our emails, please add us to your address book or safe list.
+              <br>
+              <br> Oak Crest, a continuing care retirement community, is situated on a scenic 87-acre campus in Parkville, Maryland, just 20 miles from downtown Baltimore. Enjoy living in a beautiful, natural setting where you're just a short drive from the best dining, shopping, and entertainment around.
+              <br>
+              <br> Erickson Living develops and manages campus-style communities where adults age 60 or older can live an active, engaging, and independent retirement lifestyle free from the burdens of house maintenance.
+              <br>
+              <br> We are committed to protecting the privacy of our customers and users of our website. For more information, please review our <a href="http://www.ericksonliving.com/erickson-living/erickson-living-website-terms-use-and-privacy-policy">Privacy Policy</a>.
+              <br>
+              <br>
+              8820 Walther Boulevard<br>
+              Parkville, MD 21234
+              <br>
+              <br>
+              <br> © 2015 Erickson Living<sup>®</sup>
+              <br>
+              <a href="http://ericksonliving.com" target="_blank" style="color: #70946e;">EricksonLiving.com</a>
+              <sub><img src="http://cdni.ericksonliving.com/Emails//EL_Q1_2010/genericImages/eho.gif" alt="Equal Housing Opportunity" /></sub>
+            </td>
+          </tr>
+          <!-- Footer : END -->
+        </table>
+        <!-- Email Container : END -->
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>
